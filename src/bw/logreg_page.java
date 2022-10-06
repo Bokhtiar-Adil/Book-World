@@ -11,7 +11,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class logreg_page extends JFrame implements ActionListener{
 
@@ -36,7 +36,7 @@ public class logreg_page extends JFrame implements ActionListener{
 	    final String pass = "supersqlsmash";
 
 	    Connection con = DriverManager.getConnection(url, user, pass);
-	    //if(con!=null) System.out.println("Successfully connected to mysql");
+	    
 		
 	    final String find1  = "SELECT Username FROM client_info WHERE Username = ?";
 	    final String find2  = "SELECT Pass FROM client_info WHERE Pass = ?";
@@ -97,7 +97,6 @@ public class logreg_page extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(!namebox.getText().isEmpty()) {
 					un = namebox.getText();
-					//System.out.println(un);
 					cnt[0]='Y';
 				}
 				
@@ -328,11 +327,6 @@ public class logreg_page extends JFrame implements ActionListener{
 		
 		frame.setVisible(true);
 	}
-
-//	@Override
-//	public void run() { 
-//		logreg();
-//	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

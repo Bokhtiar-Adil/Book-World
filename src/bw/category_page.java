@@ -14,7 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 import javax.swing.*;
 
@@ -41,7 +41,6 @@ public class category_page {
 	    final String password = "supersqlsmash";
 
 	    Connection con = DriverManager.getConnection(url, user, password);
-	    //if(con!=null) System.out.println("Successfully connected to mysql");
 		final String find = "SELECT Si_no, Book_name, Writer, Publication, Year_pub, Five_stars FROM Books WHERE Topic = ? ORDER BY Five_stars DESC";
 	    PreparedStatement ps = con.prepareStatement(find,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
 	    ps.setString(1, type);
@@ -177,11 +176,9 @@ public class category_page {
 								
 				frame.add(l4);
 			}
-			//if(rs.next()) rs.next();
 			var_pos += 25;
 			rs.next();
 		}
-		//System.out.println(hor_pos);
 		
 		l5 = new JLabel();
 		l5.setText("Search and Reviews");
@@ -563,12 +560,6 @@ public class category_page {
 		
 		System.out.println(pr_name+" "+bookname+" "+type+" "+star+" "+review+" ");
 		
-//		ps2.setString(1, pr_name);
-//		ps2.setString(2, bookname);
-//		ps2.setString(3, type);
-//		ps2.setInt(4, star);
-//		ps2.setString(5, review);
-//		ps2.setString(6, "Today");
 		
 		submit = new JButton();
 		submit.setBounds(1450, 750, 100, 45);
@@ -709,8 +700,6 @@ public class category_page {
 		addrev.setBounds(1335, 385, 175, 45);
 		addrev.setFocusable(false);
 		addrev.setBackground(Color.blue);
-		//addrev.setBorder(null);
-		//addrev.setBorderPainted(false);
 		addrev.setContentAreaFilled(true);
 		addrev.setOpaque(false);
 		addrev.setFont(new Font("Cambria",Font.BOLD,20));

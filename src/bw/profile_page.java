@@ -31,9 +31,6 @@ public class profile_page extends JFrame implements ActionListener{
 	ImageIcon hi = new ImageIcon("F:\\Image\\p 40.png");
 	ImageIcon bye = new ImageIcon("F:\\Image\\p2 40.png");
 	
-//	void editchecker() {
-//		
-//	}
 	
 	void profile(String pr_name, int typecode) throws SQLException{
 		
@@ -43,8 +40,6 @@ public class profile_page extends JFrame implements ActionListener{
 
 	    Connection con = DriverManager.getConnection(url, user, password);
 	    
-//	    if(con!=null) System.out.println("Successfully connected to mysql");
-//	    System.out.println(pr_name);
 	    
 	    final String op  = "SELECT * FROM client_info WHERE Username = ?";
 	    final String op2;
@@ -108,14 +103,12 @@ public class profile_page extends JFrame implements ActionListener{
 	     }  
 	    frame = new JFrame();
 		frame.setSize(800, 900);
-		//frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setLayout(null);
 		frame.setTitle("BookWorld");
 		frame.setIconImage(frameIcon.getImage());
 		
 		bg = new JLabel(new ImageIcon("F:\\Image\\pro2.jpg"));
-		//bg.setBounds(0, 0, 500, 750);
 		frame.setContentPane(bg);		
 		
 		l1 = new JLabel();
@@ -154,7 +147,6 @@ public class profile_page extends JFrame implements ActionListener{
 		
 		pos = 100; 
 		k = 0;
-		//int i;
 		for(i=0; k<14; i++,k++,pos = pos+50) {			
 			
 			l2 = new JLabel();
@@ -181,7 +173,6 @@ public class profile_page extends JFrame implements ActionListener{
 			l3.setForeground(Color.blue);
 			l3.setHorizontalAlignment(JLabel.LEFT);
 			frame.add(l3);
-			//if()
 		}
 		
 		edit = new JButton();
@@ -189,7 +180,6 @@ public class profile_page extends JFrame implements ActionListener{
 		edit.setText("Edit Profile");
 		edit.setFont(new Font("MV Boli",Font.PLAIN,25));
 		edit.setBackground(Color.black);
-		//ma.setOpaque(false);
 		edit.setBorder(null);
 		edit.setBorderPainted(false);
 		edit.setFocusable(false);

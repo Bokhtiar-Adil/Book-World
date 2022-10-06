@@ -4,14 +4,13 @@ import javax.swing.*;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 
 public class reg_page extends JFrame implements ActionListener{
 	
@@ -42,7 +41,7 @@ public class reg_page extends JFrame implements ActionListener{
 	    final String password = "supersqlsmash";
 
 	    Connection con = DriverManager.getConnection(url, user, password);
-	    //if(con!=null) System.out.println("Successfully connected to mysql");
+	    
 	    
 	    final String Insert = "INSERT INTO client_info(Username,"
 	    		+ "Pass, Cl_name, Email,"
@@ -57,8 +56,6 @@ public class reg_page extends JFrame implements ActionListener{
 	    PreparedStatement ps2 = con.prepareStatement(Insert2);
 	    PreparedStatement ps3 = con.prepareStatement(Insert3);
 	    PreparedStatement ps4 = con.prepareStatement(Insert4);
-	   // if(ps!=null) System.out.println("Successfully prepared statement");
-	    //else System.out.println("Failed to prepare statement");
 	    
 		for(int i=0; i<12; i++) cnt[i]='N';
 		
@@ -605,7 +602,6 @@ public class reg_page extends JFrame implements ActionListener{
 				if(e.getSource()==register) {
 					int i;
 					for( i=0; i<12; i++) {
-//						System.out.println(cnt[i]);
 						if (cnt[i]=='N') {
 							JOptionPane.showMessageDialog(frame, 
 									"PLease insert all the information and press 'Enter' after each option", 
@@ -645,12 +641,6 @@ public class reg_page extends JFrame implements ActionListener{
 								
 								result = ps3.executeUpdate();
 							}
-							
-//							if(result == 0) {
-//								System.out.println("\nRecords insertion failed");
-//						    } else {
-//						        System.out.println("\nRecords inserted successfully.");
-//						    }
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}
@@ -763,12 +753,6 @@ public class reg_page extends JFrame implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		String data=a1.getText().trim(); 
-//		System.out.println(data);
-//		if(!data.equals("")) {
-//			System.out.println(data);
-//			cnt[7]='Y';
-//		}
 		
 	}
 
