@@ -76,22 +76,18 @@ public class home_page {
         pr.setFocusable(false);
         pr.setForeground(Color.red);
         pr.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-        // pr.addActionListener(new ActionListener() {
+        pr.addActionListener(new ActionListener() {
 
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // if(e.getSource()==pr) {
-        // profile_page prof = new profile_page();
-        // try {
-        // prof.profile(pr_name,typecode);
-        // } catch (SQLException e1) {
-        // e1.printStackTrace();
-        // }
-        // }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == pr) {
+                    profile_page prof = new profile_page();
+                    prof.profile(pr_name, typecode);
+                }
 
-        // }
+            }
 
-        // });
+        });
         pr.addMouseListener(new MouseListener() {
 
             @Override
@@ -163,14 +159,14 @@ public class home_page {
             }
 
         });
-        // books.addActionListener(new ActionListener() {
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // books_reviews_page br = new books_reviews_page();
-        // br.books_rev(pr_name,typecode);
-        // }
+        books.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                books_reviews_page br = new books_reviews_page();
+                br.books_rev(pr_name, typecode);
+            }
 
-        // });
+        });
         frame.add(books);
 
         wr = new JButton();

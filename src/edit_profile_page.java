@@ -9,11 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class profile_page extends JFrame implements ActionListener {
+public class edit_profile_page extends JFrame implements ActionListener {
 
     String[] data = new String[11];
     String[] labels = { "Username", "Password", "Name", "Email", "Occupation", "Country",
-            "Gender", "Date of Birth", "Alma Mater", "I am a", "Field of Study", "Reviews Added", "Books Written",
+            "Gender", "Date of Birth", "ALma Mater", "I am a", "Field of Study", "Reviews Added", "Books Written",
             "Books Published" };
 
     int i, id, revadd, bkwrt, bkpub, editchecker = 0;
@@ -28,24 +28,65 @@ public class profile_page extends JFrame implements ActionListener {
     ImageIcon hi = new ImageIcon("images\\p 40.png");
     ImageIcon bye = new ImageIcon("images\\p2 40.png");
 
-    final String url = "jdbc:mysql:///BookWorld";
-    final String user = "root";
-    final String password = "supersqlsmash";
+    void editing(String pr_name) throws SQLException {
 
-    Color blue_navy = new Color(0, 0, 128);
+        final String url = "jdbc:mysql:///BookWorld";
+        final String user = "root";
+        final String password = "supersqlsmash";
 
-    void profile(String pr_name, int typecode) {
+        Connection con = DriverManager.getConnection(url, user, password);
 
-        fetch_from_database(pr_name, typecode);
+        // if(con!=null) System.out.println("Successfully connected to mysql");
+        // System.out.println(pr_name);
 
+        final String op = "SELECT * FROM client_info WHERE Username = ?";
+        PreparedStatement ps = con.prepareStatement(op);
+        try {
+            ps.setString(1, pr_name);
+            rs = ps.executeQuery();
+            data[0] = pr_name;
+            if (rs.next()) {
+                id = rs.getInt(1);
+                for (int i = 1, j = 3; j <= 12; i++, j++) {
+                    data[i] = rs.getString(j);
+                }
+                revadd = rs.getInt(14);
+                System.out.println(revadd);
+            }
+
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        } finally {
+            // close JDBC objects
+            try {
+                if (ps != null)
+                    ps.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+            try {
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+            try {
+                if (con != null)
+                    con.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
         frame = new JFrame();
         frame.setSize(800, 900);
+        // frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setLayout(null);
         frame.setTitle("BookWorld");
         frame.setIconImage(frameIcon.getImage());
 
         bg = new JLabel(new ImageIcon("images\\pro2.jpg"));
+        // bg.setBounds(0, 0, 500, 750);
         frame.setContentPane(bg);
 
         l1 = new JLabel();
@@ -83,13 +124,14 @@ public class profile_page extends JFrame implements ActionListener {
 
         pos = 100;
         k = 0;
+        // int i;
         for (i = 0; k < 14; i++, k++, pos = pos + 50) {
 
             l2 = new JLabel();
             l2.setBounds(180, pos, 200, 25);
             l2.setText(labels[k] + ":");
-            l2.setFont(new Font("Lucida Sans", Font.BOLD, 18));
-            l2.setForeground(blue_navy);
+            l2.setFont(new Font("Lucida Sans", Font.BOLD, 20));
+            l2.setForeground(Color.red);
             l2.setHorizontalAlignment(JLabel.LEFT);
             frame.add(l2);
 
@@ -113,13 +155,15 @@ public class profile_page extends JFrame implements ActionListener {
             l3.setForeground(Color.blue);
             l3.setHorizontalAlignment(JLabel.LEFT);
             frame.add(l3);
+            // if()
         }
 
         edit = new JButton();
         edit.setBounds(500, pos, 180, 30);
-        edit.setText("Edit Profile");
-        edit.setFont(new Font("Lucida Sans", Font.PLAIN, 25));
+        edit.setText("Submit");
+        edit.setFont(new Font("MV Boli", Font.PLAIN, 25));
         edit.setBackground(Color.black);
+        // ma.setOpaque(false);
         edit.setBorder(null);
         edit.setBorderPainted(false);
         edit.setFocusable(false);
@@ -142,77 +186,6 @@ public class profile_page extends JFrame implements ActionListener {
         frame.add(edit);
 
         frame.setVisible(true);
-    }
-
-    void fetch_from_database(String pr_name, int typecode) {
-
-        try (Connection con = DriverManager.getConnection(url, user, password)) {
-            final String op = "SELECT * FROM client_info WHERE Username = ?";
-            final String op2 = "SELECT No_of_Books FROM Registered_writer WHERE Username = ?";
-            final String op3 = "SELECT No_of_Books FROM Publisher WHERE Username = ?";
-            PreparedStatement ps = con.prepareStatement(op);
-            PreparedStatement ps2;
-
-            if (typecode == 1) {
-                ps2 = con.prepareStatement(op2);
-                ps2.setString(1, pr_name);
-                rs = ps2.executeQuery();
-                if (rs.next()) {
-                    bkwrt = rs.getInt(1);
-                }
-            } else if (typecode == 2) {
-                ps2 = con.prepareStatement(op3);
-                ps2.setString(1, pr_name);
-                rs = ps2.executeQuery();
-                if (rs.next()) {
-                    bkpub = rs.getInt(1);
-                }
-            } else {
-                bkwrt = 0;
-                bkpub = 0;
-            }
-            try {
-                ps.setString(1, pr_name);
-                rs = ps.executeQuery();
-                data[0] = pr_name;
-                if (rs.next()) {
-                    id = rs.getInt(1);
-                    for (int i = 1, j = 3; j <= 12; i++, j++) {
-                        data[i] = rs.getString(j);
-                    }
-                    revadd = rs.getInt(14);
-                    System.out.println(revadd);
-                }
-
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            } finally {
-                // close JDBC objects
-                try {
-                    if (ps != null)
-                        ps.close();
-                } catch (SQLException se) {
-                    se.printStackTrace();
-                }
-                try {
-                    if (rs != null)
-                        rs.close();
-                } catch (SQLException se) {
-                    se.printStackTrace();
-                }
-                try {
-                    if (con != null)
-                        con.close();
-                } catch (SQLException se) {
-                    se.printStackTrace();
-                }
-            }
-        } catch (SQLException e) {
-
-            for (int i = 0; i < 11; i++) {
-                data[i] = "dummy";
-            }
-        }
     }
 
     @Override
