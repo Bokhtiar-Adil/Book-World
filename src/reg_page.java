@@ -682,6 +682,7 @@ public class reg_page extends JFrame implements ActionListener {
                 e1.printStackTrace();
             }
         } catch (HeadlessException | SQLException e) {
+            cnt[10] = 'Y';
             e.printStackTrace();
         }
     }
