@@ -2,8 +2,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.Connection;
@@ -11,8 +9,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.*;
@@ -20,6 +16,7 @@ import javax.swing.*;
 public class all_books_page {
 
     JFrame frame;
+    JPanel panel1;
     JLabel bg, l1, l2, l3, l4, l5, l6, l7, l8, l9;
     JButton search, addbkwr, addbkpub, allrev, e2, b1, b2, b3, b4, seerev, addrev;
     JLabel books[] = new JLabel[40];
@@ -42,11 +39,9 @@ public class all_books_page {
     final String password = "supersqlsmash";
     final String find2 = "SELECT Book_name, Writer, Publication, Topic, Year_pub FROM Books WHERE Book_name = ?";
 
-    void all_books(String pr_name, int typecode) {
+    Color gray_ltcd = new Color(40, 40, 40);
 
-        Connection con = DriverManager.getConnection(url, user, password);
-        // if(con!=null) System.out.println("Successfully connected to mysql");
-        PreparedStatement ps2 = con.prepareStatement(find2);
+    void all_books(String pr_name, int typecode) {
 
         frame = new JFrame();
         frame.setSize(1800, 1000);
@@ -55,10 +50,16 @@ public class all_books_page {
         frame.setLayout(null);
         frame.setTitle("BookWorld");
         frame.setIconImage(frameIcon.getImage());
-        // frame.setBackground(Color.black);
+        // frame.setBackground(gray_ltcd);
 
-        bg = new JLabel(new ImageIcon("images\\all1.jpg"));
-        frame.setContentPane(bg);
+        // bg = new JLabel(new ImageIcon("images\\all1.jpg"));
+        // // bg = new JLabel(new ImageIcon("images\\br5.jpg"));
+        // frame.setContentPane(bg);
+
+        panel1 = new JPanel();
+        panel1.setLayout(null);
+        panel1.setBounds(0, 0, 1800, 1000);
+        panel1.setBackground(Color.black);
 
         l1 = new JLabel();
         l1.setBounds(30, 30, 425, 40);
@@ -98,17 +99,37 @@ public class all_books_page {
         l2.setText("Most popular books:");
         l2.setBounds(30, 100, 500, 30);
         l2.setForeground(Color.red);
-        l2.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
-        l2.setHorizontalAlignment(JLabel.CENTER);
+        l2.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
+        l2.setHorizontalAlignment(JLabel.LEFT);
         l2.setVerticalAlignment(JLabel.CENTER);
         frame.add(l2);
 
-        show_all_books();
+        String[] details = show_all_books();
+
+        for (int i = 0, j = 0; i < 40; i++) {
+            if (i % 10 == 0) {
+                hor_pos = 30 + j * 320;
+                var_pos = 150;
+                j++;
+            } else {
+                var_pos = 150 + (i % 10) * 80;
+            }
+            books[i] = new JLabel();
+            books[i].setText(details[i]);
+            books[i].setBounds(hor_pos, var_pos, 300, 70);
+            books[i].setFont(new Font("Cambria", Font.PLAIN, 15));
+            books[i].setHorizontalAlignment(JLabel.LEFT);
+            books[i].setBackground(Color.blue);
+            books[i].setForeground(Color.white);
+            books[i].setFocusable(true);
+            books[i].setOpaque(false);
+            frame.add(books[i]);
+        }
 
         allrev = new JButton();
         allrev.setText("Read All Reviews");
         allrev.setBounds(1400, 700, 300, 40);
-        allrev.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        allrev.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         allrev.setForeground(Color.green);
         allrev.setBackground(Color.red);
         allrev.setOpaque(false);
@@ -149,8 +170,11 @@ public class all_books_page {
                     try {
                         rr.read_review(null, bookname, 1);
                     } catch (SQLException e1) {
-
-                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(frame,
+                                "Required database is not found. Please setup database on Oracle SQL and try again.",
+                                "BookWorld",
+                                JOptionPane.WARNING_MESSAGE);
+                        // e1.printStackTrace();
                     }
                 }
 
@@ -162,7 +186,7 @@ public class all_books_page {
         addbkwr = new JButton();
         addbkwr.setText("Add Your Written Books");
         addbkwr.setBounds(1400, 750, 300, 40);
-        addbkwr.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        addbkwr.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         addbkwr.setForeground(Color.green);
         addbkwr.setBackground(Color.red);
         addbkwr.setOpaque(false);
@@ -204,8 +228,11 @@ public class all_books_page {
                         try {
                             add.add_books(pr_name, 1);
                         } catch (SQLException e1) {
-
-                            e1.printStackTrace();
+                            JOptionPane.showMessageDialog(frame,
+                                    "Required database is not found. Please setup database on Oracle SQL and try again.",
+                                    "BookWorld",
+                                    JOptionPane.WARNING_MESSAGE);
+                            // e1.printStackTrace();
                         }
                     } else {
                         JOptionPane.showMessageDialog(frame,
@@ -221,7 +248,7 @@ public class all_books_page {
         addbkpub = new JButton();
         addbkpub.setText("Add Your Published Books");
         addbkpub.setBounds(1400, 800, 300, 40);
-        addbkpub.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        addbkpub.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         addbkpub.setForeground(Color.green);
         addbkpub.setBackground(Color.red);
         addbkpub.setOpaque(false);
@@ -263,8 +290,11 @@ public class all_books_page {
                         try {
                             add.add_books(pr_name, 2);
                         } catch (SQLException e1) {
-
-                            e1.printStackTrace();
+                            JOptionPane.showMessageDialog(frame,
+                                    "Required database is not found. Please setup database on Oracle SQL and try again.",
+                                    "BookWorld",
+                                    JOptionPane.WARNING_MESSAGE);
+                            // e1.printStackTrace();
                         }
                     } else {
                         JOptionPane.showMessageDialog(frame,
@@ -283,7 +313,7 @@ public class all_books_page {
         l5.setText("Search Books");
         l5.setBounds(1350, 100, 400, 30);
         l5.setForeground(Color.red);
-        l5.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        l5.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         l5.setHorizontalAlignment(JLabel.CENTER);
         l5.setVerticalAlignment(JLabel.CENTER);
         frame.add(l5);
@@ -298,10 +328,10 @@ public class all_books_page {
         hor_pos = 1350;
         var_pos = 180;
         l6 = new JLabel();
-        l6.setText("Book Name");
+        l6.setText("Book");
         l6.setBounds(hor_pos, var_pos, 80, 30);
         l6.setForeground(Color.white);
-        l6.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+        l6.setFont(new Font("Lucida Sans", Font.PLAIN, 15));
         l6.setHorizontalAlignment(JLabel.LEFT);
         l6.setVerticalAlignment(JLabel.CENTER);
         frame.add(l6);
@@ -324,7 +354,7 @@ public class all_books_page {
         l6.setText("Search Result");
         l6.setBounds(1360, 280, 400, 30);
         l6.setForeground(Color.red);
-        l6.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        l6.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         l6.setHorizontalAlignment(JLabel.CENTER);
         l6.setVerticalAlignment(JLabel.CENTER);
         frame.add(l6);
@@ -339,7 +369,7 @@ public class all_books_page {
             left[i].setText(col[i]);
             left[i].setBounds(hor_pos, var_pos + i * 40, 90, 30);
             left[i].setForeground(Color.white);
-            left[i].setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+            left[i].setFont(new Font("Lucida Sans", Font.PLAIN, 15));
             left[i].setHorizontalAlignment(JLabel.LEFT);
             left[i].setVerticalAlignment(JLabel.CENTER);
             frame.add(left[i]);
@@ -348,7 +378,7 @@ public class all_books_page {
             right[i].setText(".....");
             right[i].setBounds(hor_pos + 100, var_pos + i * 40, 300, 30);
             right[i].setForeground(Color.yellow);
-            right[i].setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+            right[i].setFont(new Font("Lucida Sans", Font.PLAIN, 15));
             right[i].setHorizontalAlignment(JLabel.CENTER);
             right[i].setVerticalAlignment(JLabel.CENTER);
             frame.add(right[i]);
@@ -356,7 +386,7 @@ public class all_books_page {
 
         seerev = new JButton();
         seerev.setText("Read Reviews");
-        seerev.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        seerev.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         seerev.setBounds(1350, 530, 180, 40);
         seerev.setForeground(Color.green);
         seerev.setBackground(Color.red);
@@ -398,8 +428,11 @@ public class all_books_page {
                     try {
                         rr.read_review(null, bookname, 3);
                     } catch (SQLException e1) {
-
-                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(frame,
+                                "Required database is not found. Please setup database on Oracle SQL and try again.",
+                                "BookWorld",
+                                JOptionPane.WARNING_MESSAGE);
+                        // e1.printStackTrace();
                     }
                 }
 
@@ -411,7 +444,7 @@ public class all_books_page {
 
         addrev = new JButton();
         addrev.setText("Write Reviews");
-        addrev.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        addrev.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         addrev.setBounds(1575, 530, 180, 40);
         addrev.setForeground(Color.green);
         addrev.setBackground(Color.red);
@@ -460,7 +493,7 @@ public class all_books_page {
 
         search = new JButton();
         search.setText("Search");
-        search.setFont(new Font("Comic Sans MS", Font.PLAIN, 20));
+        search.setFont(new Font("Lucida Sans", Font.PLAIN, 20));
         search.setBounds(1500, 230, 120, 40);
         search.setForeground(Color.green);
         search.setBackground(Color.red);
@@ -504,11 +537,13 @@ public class all_books_page {
         });
         frame.add(search);
 
+        frame.add(panel1);
         frame.setVisible(true);
     }
 
-    void show_all_books() {
+    String[] show_all_books() {
 
+        String[] details = new String[40];
         try (Connection con = DriverManager.getConnection(url, user, password)) {
             final String find1 = "SELECT Book_name, Writer, Topic FROM Books ORDER BY Five_stars DESC LIMIT 40";
             PreparedStatement ps1 = con.prepareStatement(find1, ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -525,26 +560,19 @@ public class all_books_page {
                 } else {
                     var_pos = 150 + (i % 10) * 80;
                 }
-                books[i] = new JLabel();
                 try {
                     if (rs1.next())
-                        books[i].setText(
-                                "<html> <span style=\"font-family:Cambria;font-size:15px;\">" + rs1.getString(1)
-                                        + "</span><br> Writer: "
-                                        + rs1.getString(2) + "<br> Category: " + rs1.getString(3) + "</html>");
+                        details[i] = "<html> <span style=\"font-family:Cambria;font-size:15px;\">"
+                                + rs1.getString(1)
+                                + "</span><br> Writer: " + rs1.getString(2)
+                                + "<br> Category: " + rs1.getString(3)
+                                + "</html>";
                     else
-                        books[i].setText(".....");
+                        details[i] = ".....";
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-                books[i].setBounds(hor_pos, var_pos, 300, 70);
-                books[i].setFont(new Font("Cambria", Font.PLAIN, 15));
-                books[i].setHorizontalAlignment(JLabel.LEFT);
-                books[i].setBackground(Color.blue);
-                books[i].setForeground(Color.yellow);
-                books[i].setFocusable(true);
-                books[i].setOpaque(false);
-                frame.add(books[i]);
+
             }
 
         } catch (SQLException e) {
@@ -559,12 +587,14 @@ public class all_books_page {
             for (int i = 0; i < 40; i++) {
                 int randomNum = ThreadLocalRandom.current().nextInt(0, 7);
                 int randomNum2 = ThreadLocalRandom.current().nextInt(0, 12);
-                books[i].setText(
-                        "<html> <span style=\"font-family:Cambria;font-size:15px;\">" + random_books_names[randomNum]
-                                + "</span><br> Writer: " + random_writers_names[randomNum] +
-                                "<br> Category: " + topics[randomNum2] + "</html>");
+                details[i] = "<html> <span style=\"font-family:Cambria;font-size:15px;\">"
+                        + random_books_names[randomNum]
+                        + "</span><br> Writer: " + random_writers_names[randomNum] +
+                        "<br> Category: " + topics[randomNum2] + "</html>";
             }
         }
+
+        return details;
 
     }
 
@@ -589,17 +619,19 @@ public class all_books_page {
             }
         } catch (SQLException e) {
             // e.printStackTrace();
-            String[] random_writers_names = { "Musa Al Hafiz", "Asif Adnan", "Shamsul Arefin", "Kazi Nazrul", "Ismail Rehan", 
-                    "Lorem Ipsum", "Mister Writer", "Dr Writer", "MD Writer", "Prof. Writer", "Mr Writer", "Dr Author" };
+            String[] random_writers_names = { "Musa Al Hafiz", "Asif Adnan", "Shamsul Arefin", "Kazi Nazrul",
+                    "Ismail Rehan",
+                    "Lorem Ipsum", "Mister Writer", "Dr Writer", "MD Writer", "Prof. Writer", "Mr Writer",
+                    "Dr Author" };
             String topics[] = { "Science", "Engineering", "Medical", "Religion", "Finance", "History", "Business",
                     "Philosophy", "Arts", "Literature", "Army/Warfare", "Miscelleneous" };
             int randomNum = ThreadLocalRandom.current().nextInt(0, 12);
             category = topics[randomNum];
             right[0].setText(bookname);
             right[1].setText(random_writers_names[randomNum]);
-            right[2].setText("Dummy Publication"); 
+            right[2].setText("Dummy Publication");
             right[3].setText(category);
-            right[4].setText("2018");      
+            right[4].setText("2018");
             seerev.setEnabled(true);
             addrev.setEnabled(true);
         }
@@ -607,6 +639,7 @@ public class all_books_page {
     }
 
     void add_review(String pr_name, String bookname) {
+
         try (Connection con = DriverManager.getConnection(url, user, password)) {
             // if(con!=null) System.out.println("Successfully connected to mysql");
             PreparedStatement ps2 = con.prepareStatement(find2);
@@ -623,7 +656,15 @@ public class all_books_page {
         }
 
         write_review_page wr = new write_review_page();
-        // wr.write(pr_name, bookname, category);
+        try {
+            wr.write(pr_name, bookname, category);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(frame,
+                    "Required database is not found. Please setup database on Oracle SQL and try again.",
+                    "BookWorld",
+                    JOptionPane.WARNING_MESSAGE);
+            // e.printStackTrace();
+        }
 
     }
 }

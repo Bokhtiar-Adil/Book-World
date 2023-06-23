@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 
 public class home_page {
     int editchecker;
@@ -211,6 +212,24 @@ public class home_page {
             }
 
         });
+        wr.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // books_reviews_page br = new books_reviews_page();
+                // br.books_rev(pr_name, typecode);
+                writers_page wr = new writers_page();
+                try {
+                    wr.writers_list();
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Required database is not found. Please setup database on Oracle SQL and try again.",
+                            "BookWorld",
+                            JOptionPane.WARNING_MESSAGE);
+                    // e1.printStackTrace();
+                }
+            }
+
+        });
         frame.add(wr);
 
         pub = new JButton();
@@ -250,6 +269,24 @@ public class home_page {
                 if (e.getSource() == pub)
                     pub.setOpaque(false);
 
+            }
+
+        });
+        pub.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // books_reviews_page br = new books_reviews_page();
+                // br.books_rev(pr_name, typecode);
+                publishers_page publisher = new publishers_page();
+                try {
+                    publisher.publisher_list();
+                } catch (SQLException e1) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Required database is not found. Please setup database on Oracle SQL and try again.",
+                            "BookWorld",
+                            JOptionPane.WARNING_MESSAGE);
+                    // e1.printStackTrace();
+                }
             }
 
         });
@@ -295,25 +332,25 @@ public class home_page {
             }
 
         });
-        // logout.addActionListener(new ActionListener() {
+        logout.addActionListener(new ActionListener() {
 
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // int chkb = JOptionPane.YES_NO_OPTION;
-        // int chkr = JOptionPane.showConfirmDialog(null,
-        // "Are you sure to logout?", "BookWorld", chkb);
-        // if(chkr==0) {
-        // frame.dispose();
-        // logreg_page login_page = new logreg_page();
-        // try {
-        // login_page.logreg();
-        // } catch (SQLException e1) {
-        // e1.printStackTrace();
-        // }
-        // }
-        // }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int chkb = JOptionPane.YES_NO_OPTION;
+                int chkr = JOptionPane.showConfirmDialog(null,
+                        "Are you sure to logout?", "BookWorld", chkb);
+                if (chkr == 0) {
+                    frame.dispose();
+                    logreg_page login_page = new logreg_page();
+                    try {
+                        login_page.logreg();
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
 
-        // });
+        });
         frame.add(logout);
 
         exit = new JButton();
