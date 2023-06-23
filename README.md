@@ -1,6 +1,6 @@
 # Book World
 
-Book-World is a desktop application built using Java and SQL database. It contains the following features:
+Book-World is a desktop application built using Java programming language and SQL database. It contains the following features:
 - Login and register features
 - Read and write reviews on defferent books
 - Give rating to books
