@@ -162,8 +162,10 @@ public class home_page {
         books.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                books_reviews_page br = new books_reviews_page();
-                br.books_rev(pr_name, typecode);
+                // books_reviews_page br = new books_reviews_page();
+                // br.books_rev(pr_name, typecode);
+                all_books_page br = new all_books_page();
+                br.all_books("umar", 1);
             }
 
         });

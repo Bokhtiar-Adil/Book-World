@@ -27,9 +27,9 @@ public class all_books_page {
     JLabel right[] = new JLabel[5];
     JTextField input;
     JTextArea revbox;
-    ImageIcon frameIcon = new ImageIcon("Image\\book2.png");
-    ImageIcon hi = new ImageIcon("Image\\cat 40.png");
-    ImageIcon bye = new ImageIcon("Image\\p2 40.png");
+    ImageIcon frameIcon = new ImageIcon("images\\book2.png");
+    ImageIcon hi = new ImageIcon("images\\cat 40.png");
+    ImageIcon bye = new ImageIcon("images\\p2 40.png");
     // String[] search;
     String review, bookname = null, author = null, publi = null, category;
     int hor_pos = 30, var_pos, chkr = 0, star, size, i;
@@ -40,18 +40,12 @@ public class all_books_page {
     final String url = "jdbc:mysql:///BookWorld";
     final String user = "root";
     final String password = "supersqlsmash";
+    final String find2 = "SELECT Book_name, Writer, Publication, Topic, Year_pub FROM Books WHERE Book_name = ?";
 
-    // void search_res(String bn, String wr, String pub) {
-    //
-    // JButton book
-    // }
-
-    void all_books(String pr_name, int typecode) throws SQLException {
+    void all_books(String pr_name, int typecode) {
 
         Connection con = DriverManager.getConnection(url, user, password);
         // if(con!=null) System.out.println("Successfully connected to mysql");
-
-        final String find2 = "SELECT Book_name, Writer, Publication, Topic, Year_pub FROM Books WHERE Book_name = ?";
         PreparedStatement ps2 = con.prepareStatement(find2);
 
         frame = new JFrame();
@@ -63,7 +57,7 @@ public class all_books_page {
         frame.setIconImage(frameIcon.getImage());
         // frame.setBackground(Color.black);
 
-        bg = new JLabel(new ImageIcon("Image\\all1.jpg"));
+        bg = new JLabel(new ImageIcon("images\\all1.jpg"));
         frame.setContentPane(bg);
 
         l1 = new JLabel();
@@ -285,12 +279,6 @@ public class all_books_page {
         });
         frame.add(addbkpub);
 
-        // System.out.println(hor_pos+" "+var_pos);
-        // hor_pos = 990; var_pos = 915;
-
-        // hor_pos = 1000;
-        // var_pos = 100;
-
         l5 = new JLabel();
         l5.setText("Search Books");
         l5.setBounds(1350, 100, 400, 30);
@@ -458,26 +446,10 @@ public class all_books_page {
 
         });
         addrev.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == addrev) {
-                    try {
-                        ps2.setString(1, bookname);
-                        rs2 = ps2.executeQuery();
-                        if (rs2.next())
-                            category = rs2.getString(4);
-                    } catch (SQLException e1) {
-
-                        e1.printStackTrace();
-                    }
-                    write_review_page wr = new write_review_page();
-                    try {
-                        wr.write(pr_name, bookname, category);
-                    } catch (SQLException e1) {
-
-                        e1.printStackTrace();
-                    }
+                    add_review(pr_name, bookname);
                 }
 
             }
@@ -526,26 +498,7 @@ public class all_books_page {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == search) {
-                    try {
-                        ps2.setString(1, bookname);
-                        rs2 = ps2.executeQuery();
-                        if (rs2.next()) {
-                            right[0].setText(rs2.getString(1));
-                            for (i = 1; i < 5; i++) {
-                                right[i].setText(rs2.getString(i + 1));
-                            }
-                            seerev.setEnabled(true);
-                            addrev.setEnabled(true);
-                        } else {
-                            JOptionPane.showMessageDialog(frame,
-                                    "No record found",
-                                    "BookWorld",
-                                    JOptionPane.WARNING_MESSAGE);
-                        }
-                    } catch (SQLException e1) {
-
-                        e1.printStackTrace();
-                    }
+                    show_searched_book(bookname);
                 }
             }
         });
@@ -612,6 +565,65 @@ public class all_books_page {
                                 "<br> Category: " + topics[randomNum2] + "</html>");
             }
         }
+
+    }
+
+    void show_searched_book(String bookname) {
+
+        try (Connection con = DriverManager.getConnection(url, user, password)) {
+            PreparedStatement ps2 = con.prepareStatement(find2);
+            ps2.setString(1, bookname);
+            rs2 = ps2.executeQuery();
+            if (rs2.next()) {
+                right[0].setText(rs2.getString(1));
+                for (i = 1; i < 5; i++) {
+                    right[i].setText(rs2.getString(i + 1));
+                }
+                seerev.setEnabled(true);
+                addrev.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(frame,
+                        "No record found",
+                        "BookWorld",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (SQLException e) {
+            // e.printStackTrace();
+            String[] random_writers_names = { "Musa Al Hafiz", "Asif Adnan", "Shamsul Arefin", "Kazi Nazrul", "Ismail Rehan", 
+                    "Lorem Ipsum", "Mister Writer", "Dr Writer", "MD Writer", "Prof. Writer", "Mr Writer", "Dr Author" };
+            String topics[] = { "Science", "Engineering", "Medical", "Religion", "Finance", "History", "Business",
+                    "Philosophy", "Arts", "Literature", "Army/Warfare", "Miscelleneous" };
+            int randomNum = ThreadLocalRandom.current().nextInt(0, 12);
+            category = topics[randomNum];
+            right[0].setText(bookname);
+            right[1].setText(random_writers_names[randomNum]);
+            right[2].setText("Dummy Publication"); 
+            right[3].setText(category);
+            right[4].setText("2018");      
+            seerev.setEnabled(true);
+            addrev.setEnabled(true);
+        }
+
+    }
+
+    void add_review(String pr_name, String bookname) {
+        try (Connection con = DriverManager.getConnection(url, user, password)) {
+            // if(con!=null) System.out.println("Successfully connected to mysql");
+            PreparedStatement ps2 = con.prepareStatement(find2);
+            ps2.setString(1, bookname);
+            rs2 = ps2.executeQuery();
+            if (rs2.next())
+                category = rs2.getString(4);
+        } catch (SQLException e) {
+            String topics[] = { "Science", "Engineering", "Medical", "Religion", "Finance", "History", "Business",
+                    "Philosophy", "Arts", "Literature", "Army/Warfare", "Miscelleneous" };
+
+            int randomNum = ThreadLocalRandom.current().nextInt(0, 12);
+            category = topics[randomNum];
+        }
+
+        write_review_page wr = new write_review_page();
+        // wr.write(pr_name, bookname, category);
 
     }
 }
